@@ -1,0 +1,14 @@
+G:\C2016\foxCoreSvs\FoxCore\ConvertDataToNewFormat\bin\Debug\ConvertDataToNewFormat.exe.config
+G:\C2016\foxCoreSvs\FoxCore\ConvertDataToNewFormat\bin\Debug\ConvertDataToNewFormat.exe
+G:\C2016\foxCoreSvs\FoxCore\ConvertDataToNewFormat\bin\Debug\ConvertDataToNewFormat.pdb
+G:\C2016\foxCoreSvs\FoxCore\ConvertDataToNewFormat\obj\Debug\ConvertDataToNewFormat.csprojResolveAssemblyReference.cache
+G:\C2016\foxCoreSvs\FoxCore\ConvertDataToNewFormat\obj\Debug\ConvertDataToNewFormat.Form1.resources
+G:\C2016\foxCoreSvs\FoxCore\ConvertDataToNewFormat\obj\Debug\ConvertDataToNewFormat.Properties.Resources.resources
+G:\C2016\foxCoreSvs\FoxCore\ConvertDataToNewFormat\obj\Debug\ConvertDataToNewFormat.csproj.GenerateResource.Cache
+G:\C2016\foxCoreSvs\FoxCore\ConvertDataToNewFormat\obj\Debug\ConvertDataToNewFormat.exe
+G:\C2016\foxCoreSvs\FoxCore\ConvertDataToNewFormat\obj\Debug\ConvertDataToNewFormat.pdb
+G:\C2016\foxCoreSvs\FoxCore\ConvertDataToNewFormat\bin\Debug\hubData.xml
+G:\C2016\foxCoreSvs\FoxCore\ConvertDataToNewFormat\bin\Debug\MyCouch.Net45.dll
+G:\C2016\foxCoreSvs\FoxCore\ConvertDataToNewFormat\bin\Debug\Newtonsoft.Json.dll
+G:\C2016\foxCoreSvs\FoxCore\ConvertDataToNewFormat\bin\Debug\MyCouch.Net45.xml
+G:\C2016\foxCoreSvs\FoxCore\ConvertDataToNewFormat\bin\Debug\Newtonsoft.Json.xml
