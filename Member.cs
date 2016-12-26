@@ -52,7 +52,9 @@ namespace ConvertDataToNewFormat
          * */
 
         public Int32 index;
-        public string uuid;
+        public string memberID;
+        public string contactID;
+        public string personID;
         public string firstName;
         public string lastName;
         public string phone;

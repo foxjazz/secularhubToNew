@@ -21,10 +21,11 @@ namespace ConvertDataToNewFormat
         {
             InitializeComponent();
         }
-
-        private static Member populateContact(string xmldata)
+     
+        public static Member populateContact(string xmldata)
         {
-            var m = new Member();
+
+            var contact = new Member();
             {
                 var data = xmldata.Trim();
                 data = data.Replace("\n  ", "");
@@ -36,27 +37,27 @@ namespace ConvertDataToNewFormat
                 while (xr.Read())
                 {
                     if (xr.Name == "addressLine1")
-                        m.address = xr.ReadInnerXml();
+                        contact.address = xr.ReadInnerXml();
                     if (xr.Name == "city")
-                        m.city = xr.ReadInnerXml();
+                        contact.city = xr.ReadInnerXml();
                     if (xr.Name == "state")
-                        m.state = xr.ReadInnerXml();
+                        contact.state = xr.ReadInnerXml();
                     if (xr.Name == "zip")
-                        m.zip = xr.ReadInnerXml();
+                        contact.zip = xr.ReadInnerXml();
                     if (xr.Name == "emailAddress")
-                        m.email = xr.ReadInnerXml();
+                        contact.email = xr.ReadInnerXml();
                     if (xr.Name == "phone")
-                        m.phone = xr.ReadInnerXml();
+                        contact.phone = xr.ReadInnerXml();
                     if (xr.Name == "description")
-                        m.Description = xr.ReadInnerXml();
+                        contact.Description = xr.ReadInnerXml();
                     if (xr.Name == "notes")
-                        m.Notes = xr.ReadInnerXml();
+                        contact.Notes = xr.ReadInnerXml();
                     if (xr.Name == "personID" && Int32.TryParse(xr.ReadInnerXml(),out test))
-                        popPerson(test, ref m);
+                        popPerson(test, ref contact);
                 }
             }
 
-                return m;
+                return contact;
         }
 
         private static void popPerson(Int32 id, ref Member m)
@@ -101,9 +102,9 @@ namespace ConvertDataToNewFormat
 
         private void start_Click(object sender, EventArgs e)
         {
-            var db = new MyCouchClient("http://foxjazz:greeper2@localhost:5984/", "members");
             
-            DoTask(  rtbStatus,db);
+            
+            DoTask(  rtbStatus);
 
         }
         public static StringContent SetContent(string data)
@@ -111,68 +112,30 @@ namespace ConvertDataToNewFormat
             var content = new StringContent(data, Encoding.UTF8, "application/json");
             return content;
         }
-        public static async Task DoTask( RichTextBox rtbStatus, MyCouchClient db)
+        public static async Task DoTask( RichTextBox rtbStatus)
         {
             //var result = await db.Documents.PostAsync(data);
 
             //var http = new HttpClient();
             //Uri uri = new Uri("http://localhost/5984");
             //Uri uriid = new Uri("http://localhost/5984/_uuids");
-            
+            MemberProc mproc = new MemberProc();
+            mproc.begin();
 
             XmlTextReader reader = new XmlTextReader("hubData.xml");
-            int i = 0;
-            List<Member> members = new List<Member>();
 
-            while (reader.Read())
+
+            var db = new MyCouchClient("http://foxjazz:greeper2@localhost:5984/", "members");
+
+            foreach (var m in mproc.ml)
             {
+                var json = JsonConvert.SerializeObject(m);
 
-                //rtbStatus.AppendText(reader.NodeType.ToString());
-                if (reader.NodeType == XmlNodeType.Element && reader.Name == "contact")
-                {
-
-                    //                    rtbStatus.AppendText(reader.Name + "  " + reader.Value);
-                    var newm = populateContact(reader.ReadOuterXml());
+                await db.Documents.PutAsync(m.memberID, json);
 
 
-                    string jsondata = Newtonsoft.Json.JsonConvert.SerializeObject(newm);
-                    //i++;
-                    try
-                    {
-                        var response = await db.Documents.PostAsync(jsondata);
-                        string jresponse = Newtonsoft.Json.JsonConvert.SerializeObject(response);
-                        rtbStatus.AppendText(jresponse);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.Write(ex.Message);
-                    }
-                    //var result = await db.Documents.PostAsync(jsondata);
-                    //try
-                    //{
-                    //    var httpr = await http.GetAsync(uriid);
-                    //    if (httpr.IsSuccessStatusCode)
-                    //    {
-                    //        var response = await http.PutAsync(uri, SetContent(jsondata)).ContinueWith((postTask) => postTask.Result.EnsureSuccessStatusCode());
-                    //        string jresponse = Newtonsoft.Json.JsonConvert.SerializeObject(response);
-                    //        rtbStatus.AppendText(jresponse);
-                    //    }
-                        
-                    //}
-                    //catch(Exception ex)
-                    //{
-                    //    Console.Write(ex.Message);
-                    //}
-                    
-                    rtbStatus.AppendText("\r\n");
-                }
-             
-                rtbStatus.Refresh();
-
-                if (i > 50)
-                    return;
             }
+            
 
         }
         private void Form1_Load(object sender, EventArgs e)

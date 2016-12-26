@@ -35,7 +35,7 @@
             // 
             // start
             // 
-            this.start.Location = new System.Drawing.Point(582, 89);
+            this.start.Location = new System.Drawing.Point(65, 86);
             this.start.Name = "start";
             this.start.Size = new System.Drawing.Size(293, 58);
             this.start.TabIndex = 0;
@@ -45,9 +45,9 @@
             // 
             // rtbStatus
             // 
-            this.rtbStatus.Location = new System.Drawing.Point(556, 164);
+            this.rtbStatus.Location = new System.Drawing.Point(84, 167);
             this.rtbStatus.Name = "rtbStatus";
-            this.rtbStatus.Size = new System.Drawing.Size(484, 306);
+            this.rtbStatus.Size = new System.Drawing.Size(958, 481);
             this.rtbStatus.TabIndex = 1;
             this.rtbStatus.Text = "";
             // 
