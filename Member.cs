@@ -51,8 +51,10 @@ namespace ConvertDataToNewFormat
     payments: Array<IPayment>;
          * */
 
+
+        public string id;
         public Int32 index;
-        public string memberID;
+        
         public string contactID;
         public string personID;
         public string firstName;
@@ -74,8 +76,6 @@ namespace ConvertDataToNewFormat
         public string Notes;
         public List<ExtendedMember> extendedMembers;
         public List<IPayment> payments;
-
-
 
     }
 }

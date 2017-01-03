@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.IO;
 using MyCouch;
 using System.Net.Http;
+using System.Threading;
 
 namespace ConvertDataToNewFormat
 {
@@ -22,83 +23,9 @@ namespace ConvertDataToNewFormat
             InitializeComponent();
         }
      
-        public static Member populateContact(string xmldata)
-        {
+      
 
-            var contact = new Member();
-            {
-                var data = xmldata.Trim();
-                data = data.Replace("\n  ", "");
-                data = data.Replace("\n ", "");
-                data = data.Replace("\n", "");
-                Int32 test;
-                var xr = XmlReader.Create(new StringReader(data));
-
-                while (xr.Read())
-                {
-                    if (xr.Name == "addressLine1")
-                        contact.address = xr.ReadInnerXml();
-                    if (xr.Name == "city")
-                        contact.city = xr.ReadInnerXml();
-                    if (xr.Name == "state")
-                        contact.state = xr.ReadInnerXml();
-                    if (xr.Name == "zip")
-                        contact.zip = xr.ReadInnerXml();
-                    if (xr.Name == "emailAddress")
-                        contact.email = xr.ReadInnerXml();
-                    if (xr.Name == "phone")
-                        contact.phone = xr.ReadInnerXml();
-                    if (xr.Name == "description")
-                        contact.Description = xr.ReadInnerXml();
-                    if (xr.Name == "notes")
-                        contact.Notes = xr.ReadInnerXml();
-                    if (xr.Name == "personID" && Int32.TryParse(xr.ReadInnerXml(),out test))
-                        popPerson(test, ref contact);
-                }
-            }
-
-                return contact;
-        }
-
-        private static void popPerson(Int32 id, ref Member m)
-        {
-            var xr1 = new XmlTextReader("hubData.xml");
-            bool stay = true;
-            Int32 test;
-            bool isIN = false;
-            while(xr1.Read() && stay)
-            {
-                if(xr1.Name == "person" && isIN == false)
-                {
-                    isIN = true;
-                    xr1.Read();
-                    if(xr1.Name != "id")
-                    {
-                        xr1.Read();
-                    }
-                       
-                        if ( xr1.Name == "id")
-                        {
-                            Int32.TryParse(xr1.ReadInnerXml(), out test);
-                            if (test == id)
-                            {
-                                xr1.Read();
-                                m.firstName = xr1.ReadInnerXml();
-                                xr1.Read();
-                                m.lastName = xr1.ReadInnerXml();
-                                stay = false;
-                            }
-                        }
-                        
-
-                    
-                }
-                if(xr1.Name == "person" && isIN)
-                {
-                    isIN = false;
-                }
-            }
-        }
+      
 
         private void start_Click(object sender, EventArgs e)
         {
@@ -124,18 +51,47 @@ namespace ConvertDataToNewFormat
 
             XmlTextReader reader = new XmlTextReader("hubData.xml");
 
-
-            var db = new MyCouchClient("http://foxjazz:greeper2@localhost:5984/", "members");
-
+            var db = new MyCouchClient("http://74.208.129.62:5984/", "members");
+            int count = 1;
             foreach (var m in mproc.ml)
             {
-                var json = JsonConvert.SerializeObject(m);
-
-                await db.Documents.PutAsync(m.memberID, json);
-
-
+                
+                dynamic res = await db.Documents.GetAsync(m.id);
+                dynamic resd = await db.Documents.DeleteAsync(m.id, res.Rev);
+                var json2 = JsonConvert.SerializeObject(m);
+                dynamic resw = await db.Documents.PutAsync(m.id, json2);
+                Console.WriteLine("sending document" + count);
+                count++;
             }
+
+            /*var db = new MyCouchClient("http://localhost:5984/", "newdata");
             
+            foreach (var m in mproc.ml)
+            {
+
+                /*
+                                var r1 = await db.Documents.GetAsync(m.memberID);
+
+                                dynamic r = JsonConvert.DeserializeObject(r1.Content);
+
+                                r.address = m.address;
+                                r.city = m.city;
+                                r.state = m.state;
+                                r.zip = m.zip;
+                                r.phone = m.phone;
+                                r.email = m.email;
+
+                                var json2 = JsonConvert.SerializeObject(r);
+                #1#
+                var json2 = JsonConvert.SerializeObject(m);
+                
+
+                dynamic response = await db.Documents.PutAsync(m.id, json2);
+                var jsonResult = JsonConvert.SerializeObject(response);
+                Console.WriteLine(jsonResult);
+
+            }*/
+
 
         }
         private void Form1_Load(object sender, EventArgs e)

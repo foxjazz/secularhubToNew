@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -118,26 +119,31 @@ namespace ConvertDataToNewFormat
                         {
                             for (int i1 = 0; i1 < xxn.ChildNodes.Count; i1++)
                             {
-                                if (xm.ChildNodes[i].Name == "personID" && xm.ChildNodes[i].InnerText == m.personID)
+                                if (xxn.ChildNodes[i1].Name == "personID" && xxn.ChildNodes[i1].InnerText == m.personID)
                                 {
-                                    foreach (XmlNode xnn in xm.ChildNodes)
+                                    foreach (XmlNode znn in xxn.ChildNodes)
                                     {
+                                        if (znn.Name == "emailAddress")
+                                            m.email = znn.InnerText;
+                                        if (znn.Name == "addressLine1")
+                                            m.address = znn.InnerText;
+                                        if (znn.Name == "addressLine2")
+                                            m.address += " " + znn.InnerText;
+                                        if (znn.Name == "city")
+                                            m.city = znn.InnerText;
+                                        if (znn.Name == "state")
+                                            m.state = znn.InnerText;
 
-                                        if (xnn.Name == "addressLine1")
-                                            m.address = xnn.InnerText;
-                                        if (xnn.Name == "addressLine2")
-                                            m.address += " " + xnn.InnerText;
-                                        if (xnn.Name == "city")
-                                            m.city = xnn.InnerText;
-                                        if (xnn.Name == "state")
-                                            m.state = xnn.InnerText;
-
-                                        if (xnn.Name == "zip")
-                                            m.zip = xnn.InnerText;
-                                        if (xnn.Name == "phone")
-                                            m.phone = xnn.InnerText;
-                                        if (xnn.Name == "emailAddress")
-                                            m.email = xnn.InnerText;
+                                        if (znn.Name == "zip")
+                                            m.zip = znn.InnerText;
+                                        if (znn.Name == "phone")
+                                        {
+                                            m.phone = znn.InnerText;
+                                            if(m.phone.Length > 0)
+                                                Console.WriteLine(m.phone);
+                                        }
+                                        if (znn.Name == "emailAddress")
+                                            m.email = znn.InnerText;
                                     }
                                 }
                             }
@@ -156,7 +162,7 @@ namespace ConvertDataToNewFormat
             foreach (XmlNode x in xml)
             {
                 if (x.Name == "membershipID")
-                    m.memberID = x.InnerText;
+                    m.id = x.InnerText;
                 if (x.Name == "personID")
                     m.personID = x.InnerText;
 
@@ -171,7 +177,7 @@ namespace ConvertDataToNewFormat
             {
                 for (int i = 0; i < xm.ChildNodes.Count; i++)
                 {
-                    if (xm.ChildNodes[i].Name == "membershipID" && xm.ChildNodes[i].InnerText == m.memberID)
+                    if (xm.ChildNodes[i].Name == "membershipID" && xm.ChildNodes[i].InnerText == m.id)
                     {
                         foreach (XmlNode xn in xm.ChildNodes)
                         {
@@ -190,18 +196,22 @@ namespace ConvertDataToNewFormat
         }
         internal void PushToDatabase()
         {
-            var db = new MyCouchClient("http://foxjazz:greeper2@localhost:5984/", "members");
+            var db = new MyCouchClient("http://74.208.129.62:5984/", "members");
 
             foreach (var m in ml)
             {
                 var json = JsonConvert.SerializeObject(m);
 
-                db.Documents.PutAsync(m.memberID, json);
+
+                var response =   db.Documents.PutAsync(m.id, json);
+                Console.WriteLine(response.Result);
+                Console.WriteLine("has exception: " + response.Exception);
+                Console.WriteLine("is falted: " + response.IsFaulted);
 
 
             }
             
-            throw new NotImplementedException();
+            
         }
     }
 }
