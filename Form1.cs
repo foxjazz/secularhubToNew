@@ -55,7 +55,7 @@ namespace ConvertDataToNewFormat
             int count = 1;
             foreach (var m in mproc.ml)
             {
-                
+                Console.WriteLine(m.phone);
                 dynamic res = await db.Documents.GetAsync(m.id);
                 dynamic resd = await db.Documents.DeleteAsync(m.id, res.Rev);
                 var json2 = JsonConvert.SerializeObject(m);
@@ -91,7 +91,8 @@ namespace ConvertDataToNewFormat
                 Console.WriteLine(jsonResult);
 
             }*/
-
+            
+            Console.WriteLine("action completed" + count);
 
         }
         private void Form1_Load(object sender, EventArgs e)

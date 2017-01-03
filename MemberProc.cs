@@ -46,6 +46,30 @@ namespace ConvertDataToNewFormat
                     doMembers(m);
                     doPeople(m);
                     addPayments(m);
+                    if(m.phone != null && m.phone.Length > 0)
+                        Console.WriteLine("Done:" + m.phone);
+                    if (m.phone == null)
+                        m.phone = "";
+                    if (m.address == null)
+                        m.address = "";
+                    if (m.city == null)
+                        m.city = "";
+                    if (m.state == null)
+                        m.state = "";
+                    if (m.zip == null)
+                        m.zip = "";
+                    if (m.firstName == null)
+                        m.firstName = "";
+                    if (m.lastName == null)
+                        m.lastName = "";
+                    if (m.email == null)
+                        m.email = "";
+                    if (m.payments == null)
+                        m.payments = new List<IPayment>();
+                    
+                    
+                    
+
                 }
 
 
@@ -123,6 +147,8 @@ namespace ConvertDataToNewFormat
                                 {
                                     foreach (XmlNode znn in xxn.ChildNodes)
                                     {
+                                        if (znn.Name == null)
+                                            continue;
                                         if (znn.Name == "emailAddress")
                                             m.email = znn.InnerText;
                                         if (znn.Name == "addressLine1")
@@ -142,8 +168,6 @@ namespace ConvertDataToNewFormat
                                             if(m.phone.Length > 0)
                                                 Console.WriteLine(m.phone);
                                         }
-                                        if (znn.Name == "emailAddress")
-                                            m.email = znn.InnerText;
                                     }
                                 }
                             }
