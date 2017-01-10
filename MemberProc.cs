@@ -150,23 +150,32 @@ namespace ConvertDataToNewFormat
                                         if (znn.Name == null)
                                             continue;
                                         if (znn.Name == "emailAddress")
-                                            m.email = znn.InnerText;
+                                            if(znn.InnerText.Length > 0)
+                                                m.email = znn.InnerText;
                                         if (znn.Name == "addressLine1")
-                                            m.address = znn.InnerText;
+                                            if (znn.InnerText.Length > 0)
+                                                m.address = znn.InnerText;
                                         if (znn.Name == "addressLine2")
-                                            m.address += " " + znn.InnerText;
+                                            if (znn.InnerText.Length > 0)
+                                                m.address += " " + znn.InnerText;
                                         if (znn.Name == "city")
-                                            m.city = znn.InnerText;
+                                            if (znn.InnerText.Length > 0)
+                                                m.city = znn.InnerText;
                                         if (znn.Name == "state")
-                                            m.state = znn.InnerText;
+                                            if (znn.InnerText.Length > 0)
+                                                m.state = znn.InnerText;
 
                                         if (znn.Name == "zip")
+                                            if(znn.InnerText.Length > 0)
                                             m.zip = znn.InnerText;
                                         if (znn.Name == "phone")
                                         {
-                                            m.phone = znn.InnerText;
-                                            if(m.phone.Length > 0)
-                                                Console.WriteLine(m.phone);
+                                            if (znn.InnerText.Length > 0)
+                                            {
+                                                m.phone = znn.InnerText;
+                                                if (m.phone.Length > 0)
+                                                    Console.WriteLine(m.phone);
+                                            }
                                         }
                                     }
                                 }
